@@ -15,8 +15,8 @@ module IssueReminder
 
   def self.close_old_resolved_issues
     # FIXME make the resolved / closed states configurable
-    resolved = IssueStatus.find_by_name 'Gelöst'
-    closed = IssueStatus.find_by_name 'Geschlossen'
+    resolved = IssueStatus.find_by_name 'Resolved'
+    closed = IssueStatus.find_by_name 'Closed'
     Issue.where([ "updated_on < ? AND status_id = ?",
                  Setting.plugin_redmine_issue_reminder['close_issues_after_days'].to_i.days.ago,
                  resolved.id
@@ -37,7 +37,7 @@ module IssueReminder
   # - belong to a project where the plugin has been activated
   # - have a due date smaller than now + 8 days
   def self.due_issues
-    resolved = IssueStatus.find_by_name 'Gelöst'
+    resolved = IssueStatus.find_by_name 'Resolved'
     Hash.new{ |h,k|
       h[k] = Hash.new{ |h,k| h[k] = [] }
     }.tap do |issues_by_user_and_project|
